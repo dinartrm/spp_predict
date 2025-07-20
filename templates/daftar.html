@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Daftar Siswa</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #ead7c171;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #535650a2;
+        }
+        th {
+            background-color: #6dc2d195;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        h2 {
+            text-align: center;
+        }
+        .hapus-button {
+            background-color: #ba2312; /* merah */
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .hapus-button:hover {
+            background-color: #6e140a; /* merah lebih gelap saat hover */
+        }
+        .edit-button {
+            background-color: #4CAF50; /* biru */
+            color: white;
+            border: none;
+            padding: 6px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-left: 0px;
+        }
+
+        .edit-button:hover {
+            background-color: #327334;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-container input[type="text"] {
+            padding: 9px;
+            width: 300px; /* bisa kamu ubah sesuai kebutuhan */
+            font-size: 14px;
+        }
+
+        .search-container button {
+            padding: 9px 16px;
+            font-size: 14px;
+            font-weight: bold;
+            background-color: #4CAF50; /* warna hijau */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .search-container button:hover {
+            background-color: #45a049;
+        }
+
+        .search-container a button {
+            background-color: #d9534f; /* warna merah untuk reset */
+        }
+
+        .search-container a button:hover {
+            background-color: #c9302c;
+        }
+    </style>
+</head>
+<body>
+    <h2>Daftar Siswa SMK Islamic Village 2024-2025</h2>
+
+    {% if message %}
+        <p style="color: green;">{{ message }}</p>
+    {% endif %}
+
+    <form method="GET" action="{{ url_for('daftar_siswa') }}" class="search-container">
+        <input type="text" name="q" placeholder="Cari berdasarkan NIPD atau Nama" value="{{ request.args.get('q', '') }}">
+        <button type="submit">Cari</button>
+        {% if request.args.get('q') %}
+            <a href="{{ url_for('daftar_siswa') }}"><button type="button">Reset</button></a>
+        {% endif %}
+    </form>
+
+    {% if siswa %}
+    <table border="1" cellpadding="8" cellspacing="0">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>NIPD</th>
+                <th>Nama</th>
+                <th>Penghasilan Ayah</th>
+                <th>Penghasilan Ibu</th>
+                <th>Pekerjaan Ibu</th>
+                <th>Pendidikan Ibu</th>
+                <th>Kelas</th>
+                <th>SPP Normal</th>
+                <th>Potongan SPP</th>
+                <th>Harus Dibayar</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for siswa in siswa %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ siswa['nipd'] }}</td>
+                <td>{{ siswa['nama'] }}</td>
+                <td>{{ siswa['penghasilan_ayah'] }}</td>
+                <td>{{ siswa['penghasilan_ibu'] }}</td>
+                <td>{{ siswa['pekerjaan_ibu'] }}</td>
+                <td>{{ siswa['pendidikan_ibu'] }}</td>
+                <td>{{ siswa['kelas'] }}</td>
+                <td>Rp {{ "{:,.0f}".format(siswa['spp_normal']) }}</td>
+                <td>{{ siswa['potongan_spp'] }}</td>
+                <td>Rp {{ "{:,.0f}".format(siswa['harus_dibayar']) }}</td>
+                <td>
+                    <form action="/hapus/{{ siswa['id'] }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini?');" style="margin-bottom: 4px;">
+                        <button type="submit" class="hapus-button">Hapus</button>
+                    </form>
+                    <a href="/edit/{{ siswa['id'] }}">
+                        <button class="edit-button">Edit</button>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p style="text-align: center; font-style: italic;">Data tidak ditemukan.</p>
+    {% endif %}
+</body>

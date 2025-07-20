@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f4f4f4; }
+        nav { margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: blue; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/">Beranda</a>
+        <a href="/input">Input Data Siswa</a>
+        <a href="/daftar">Daftar Siswa</a>
+    </nav>
+    {% block content %}{% endblock %}
+</body>
+</html>

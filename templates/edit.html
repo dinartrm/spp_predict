@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Data Siswa</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 150vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            background-color: white;
+            padding: 25px;
+            border-radius: 1px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            max-width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 2px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 1px;
+        }
+
+        select, input[type="text"], button {
+            padding: 10px;
+            margin-bottom: 1px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 5px;
+        }
+
+        button:hover {
+            background-color: #1976D2;
+        }
+
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #e7f3e7;
+            border: 1px solid #d4e8d4;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Edit Data Siswa</h1>
+    <form method="POST" action="/update/{{ siswa.id }}">
+        <label for="nipd">NIPD:</label>
+        <input type="text" name="nipd" value="{{ siswa.nipd }}" required><br><br>
+
+        <label for="nama">Nama:</label>
+        <input type="text" name="nama" value="{{ siswa.nama }}" required><br><br>
+
+        <label for="penghasilan_ayah">Penghasilan Ayah:</label>
+        <select name="penghasilan_ayah" required>
+            {% for opsi in penghasilan_opsi %}
+                <option value="{{ opsi }}" {% if siswa.penghasilan_ayah == opsi %}selected{% endif %}>{{ opsi }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="penghasilan_ibu">Penghasilan Ibu:</label>
+        <select name="penghasilan_ibu" required>
+            {% for opsi in penghasilan_opsi %}
+                <option value="{{ opsi }}" {% if siswa.penghasilan_ibu == opsi %}selected{% endif %}>{{ opsi }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="pekerjaan_ibu">Pekerjaan Ibu:</label>
+        <select name="pekerjaan_ibu" required>
+            {% for i in range(10) %}
+                <option value="{{ i }}" {% if siswa.pekerjaan_ibu == i|string %}selected{% endif %}>
+                    {% if i == 0 %}Tidak Bekerja{% elif i == 1 %}Karyawan Swasta{% elif i == 2 %}Wiraswasta{% elif i == 3 %}PNS/TNI/Polri{% elif i == 4 %}Petani{% elif i == 5 %}Pedagang Kecil{% elif i == 6 %}TKI{% elif i == 7 %}Buruh{% elif i == 8 %}Wirausaha{% elif i == 9 %}Lainnya{% endif %}
+                </option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="pendidikan_ibu">Pendidikan Ibu:</label>
+        <select name="pendidikan_ibu" required>
+            {% for opsi in pendidikan_opsi %}
+                <option value="{{ opsi }}" {% if siswa.pendidikan_ibu == opsi %}selected{% endif %}>{{ opsi }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="kelas">Kelas:</label>
+        <select name="kelas" required>
+            <option value="10" {% if siswa.kelas == '10' %}selected{% endif %}>10</option>
+            <option value="11" {% if siswa.kelas == '11' %}selected{% endif %}>11</option>
+            <option value="12" {% if siswa.kelas == '12' %}selected{% endif %}>12</option>
+        </select><br><br>
+
+        <button type="submit">Simpan Perubahan & Prediksi Ulang</button>
+    </form>
+
+    {% if prediction is not none %}
+    <div class="result">
+        <h2>Hasil Prediksi Baru</h2>
+        <p><strong>Potongan SPP: </strong>{{ prediction }}</p>
+        <p><strong>SPP Normal: </strong>{{ spp_normal }}</p>
+        <p><strong>Harus Dibayar: </strong>{{ harus_dibayar }}</p>
+    </div>
+    {% endif %}
+</div>
+
+</body>
+</html>

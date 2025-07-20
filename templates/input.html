@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediksi Potongan SPP</title>
+    <style>
+        /* CSS untuk meratakan halaman di tengah */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 10px;
+            height: 155vh; /* Menyusun tinggi halaman menjadi penuh */
+            display: flex;
+            justify-content: center; /* Membuat konten horisontal berada di tengah */
+            align-items: center; /* Membuat konten vertikal berada di tengah */
+            background-color: #ead7c171; /* Warna latar belakang */
+        }
+
+        /* CSS untuk form dan elemen lainnya */
+        .container {
+            background-color: white;
+            padding: 25px;
+            border-radius: 1px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            max-width: 100%; /* Mengatur lebar agar responsif */
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Mengatur jarak antar label */
+        label {
+            margin-bottom: 1px;
+            margin-bottom: 1px;
+        }
+
+        select, input[type="text"], button {
+            padding: 10px;
+            margin-bottom: 1px;
+            margin-top: 1px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 8px;
+            font-size: 16px;           
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #e7f3e7;
+            border: 1px solid #d4e8d4;
+            border-radius: 5px;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div class="container">
+        <h1>Formulir Prediksi Potongan SPP</h1>
+
+        <!-- Tampilkan pesan berhasil atau error -->
+        {% if message %}
+            <p style="color: rgb(41, 177, 77); font-weight: bold;">{{ message }}</p>
+        {% endif %}
+        {% if message_error %}
+            <p style="color: red; font-weight: bold;">{{ message_error }}</p>
+        {% endif %}
+
+        <form action="/input" method="POST" id="predictForm">
+            <label for="nipd">NIPD:</label>
+            <input type="text" id="nipd" name="nipd" value="{{ nipd }}" required><br><br>
+
+            <label for="nama">Nama Siswa:</label>
+            <input type="text" id="nama" name="nama" value="{{ nama }}" required><br><br>
+
+            <label for="penghasilan_ayah">Penghasilan Ayah:</label>
+            <select name="penghasilan_ayah" id="penghasilan_ayah" required>
+                <option value="" disabled selected>Pilih Disini</option>
+                <option value="Kurang dari Rp. 500,000" {% if penghasilan_ayah == 'Kurang dari Rp. 500,000' %}selected{% endif %}>Kurang dari Rp. 500,000</option>
+                <option value="Rp. 500,000 - Rp. 999,999" {% if penghasilan_ayah == 'Rp. 500,000 - Rp. 999,999' %}selected{% endif %}>Rp. 500,000 - Rp. 999,999</option>
+                <option value="Rp. 1,000,000 - Rp. 1,999,999" {% if penghasilan_ayah == 'Rp. 1,000,000 - Rp. 1,999,999' %}selected{% endif %}>Rp. 1,000,000 - Rp. 1,999,999</option>
+                <option value="Rp. 2,000,000 - Rp. 4,999,999" {% if penghasilan_ayah == 'Rp. 2,000,000 - Rp. 4,999,999' %}selected{% endif %}>Rp. 2,000,000 - Rp. 4,999,999</option>
+                <option value="Rp. 5,000,000 - Rp. 20,000,000" {% if penghasilan_ayah == 'Rp. 5,000,000 - Rp. 20,000,000' %}selected{% endif %}>Rp. 5,000,000 - Rp. 20,000,000</option>
+                <option value="Lebih dari Rp. 20,000,000" {% if penghasilan_ayah == 'Lebih dari Rp. 20,000,000' %}selected{% endif %}>Lebih dari Rp. 20,000,000</option>
+                <option value="Tidak Berpenghasilan" {% if penghasilan_ayah == 'Tidak Berpenghasilan' %}selected{% endif %}>Tidak Berpenghasilan</option>
+            </select><br><br>
+
+            <label for="penghasilan_ibu">Penghasilan Ibu:</label>
+            <select name="penghasilan_ibu" id="penghasilan_ibu" required>
+                <option value="" disabled selected>Pilih Disini</option>
+                <option value="Kurang dari Rp. 500,000" {% if penghasilan_ibu == 'Kurang dari Rp. 500,000' %}selected{% endif %}>Kurang dari Rp. 500,000</option>
+                <option value="Rp. 500,000 - Rp. 999,999" {% if penghasilan_ibu == 'Rp. 500,000 - Rp. 999,999' %}selected{% endif %}>Rp. 500,000 - Rp. 999,999</option>
+                <option value="Rp. 1,000,000 - Rp. 1,999,999" {% if penghasilan_ibu == 'Rp. 1,000,000 - Rp. 1,999,999' %}selected{% endif %}>Rp. 1,000,000 - Rp. 1,999,999</option>
+                <option value="Rp. 2,000,000 - Rp. 4,999,999" {% if penghasilan_ibu == 'Rp. 2,000,000 - Rp. 4,999,999' %}selected{% endif %}>Rp. 2,000,000 - Rp. 4,999,999</option>
+                <option value="Rp. 5,000,000 - Rp. 20,000,000" {% if penghasilan_ibu == 'Rp. 5,000,000 - Rp. 20,000,000' %}selected{% endif %}>Rp. 5,000,000 - Rp. 20,000,000</option>
+                <option value="Lebih dari Rp. 20,000,000" {% if penghasilan_ibu == 'Lebih dari Rp. 20,000,000' %}selected{% endif %}>Lebih dari Rp. 20,000,000</option>
+                <option value="Tidak Berpenghasilan" {% if penghasilan_ibu == 'Tidak Berpenghasilan' %}selected{% endif %}>Tidak Berpenghasilan</option>
+            </select><br><br>
+
+            <label for="pekerjaan_ibu">Pekerjaan Ibu:</label>
+            <select name="pekerjaan_ibu" id="pekerjaan_ibu" required>
+                <option value="Tidak Bekerja" {% if pekerjaan_ibu == 'Tidak Bekerja' %}selected{% endif %}>Tidak Bekerja</option>
+                <option value="Karyawan Swasta" {% if pekerjaan_ibu == 'Karyawan Swasta' %}selected{% endif %}>Karyawan Swasta</option>
+                <option value="Wiraswasta" {% if pekerjaan_ibu == 'Wiraswasta' %}selected{% endif %}>Wiraswasta</option>
+                <option value="PNS/TNI/Polri" {% if pekerjaan_ibu == 'PNS/TNI/Polri' %}selected{% endif %}>PNS/TNI/Polri</option>
+                <option value="Petani" {% if pekerjaan_ibu == 'Petani' %}selected{% endif %}>Petani</option>
+                <option value="Pedagang Kecil" {% if pekerjaan_ibu == 'Pedagang Kecil' %}selected{% endif %}>Pedagang Kecil</option>
+                <option value="TKI" {% if pekerjaan_ibu == 'TKI' %}selected{% endif %}>TKI</option>
+                <option value="Buruh" {% if pekerjaan_ibu == 'Buruh' %}selected{% endif %}>Buruh</option>
+                <option value="Wirausaha" {% if pekerjaan_ibu == 'Wirausaha' %}selected{% endif %}>Wirausaha</option>
+                <option value="Lainnya" {% if pekerjaan_ibu == 'Lainnya' %}selected{% endif %}>Lainnya</option>
+            </select><br><br>
+
+            <label for="pendidikan_ibu">Pendidikan Ibu:</label>
+            <select name="pendidikan_ibu" id="pendidikan_ibu" required>
+                <option value="" disabled selected>Pilih Disini</option>
+                <option value="Tidak diketahui" {% if pendidikan_ibu == 'Tidak diketahui' %}selected{% endif %}>Tidak diketahui</option>
+                <option value="SD / sederajat" {% if pendidikan_ibu == 'SD / sederajat' %}selected{% endif %}>SD / sederajat</option>
+                <option value="SMP / sederajat" {% if pendidikan_ibu == 'SMP / sederajat' %}selected{% endif %}>SMP / sederajat</option>
+                <option value="SMA / sederajat" {% if pendidikan_ibu == 'SMA / sederajat' %}selected{% endif %}>SMA / sederajat</option>
+                <option value="D1" {% if pendidikan_ibu == 'D1' %}selected{% endif %}>D1</option>
+                <option value="D2" {% if pendidikan_ibu == 'D2' %}selected{% endif %}>D2</option>
+                <option value="D3" {% if pendidikan_ibu == 'D3' %}selected{% endif %}>D3</option>
+                <option value="D4" {% if pendidikan_ibu == 'D4' %}selected{% endif %}>D4</option>
+                <option value="S1" {% if pendidikan_ibu == 'S1' %}selected{% endif %}>S1</option>
+                <option value="S2" {% if pendidikan_ibu == 'S2' %}selected{% endif %}>S2</option>
+            </select><br><br>
+
+            <label for="kelas">Kelas:</label>
+            <select name="kelas" id="kelas" required>
+                <option value="" disabled selected>Pilih Disini</option>
+                <option value="10" {% if kelas == '10' %}selected{% endif %}>10</option>
+                <option value="11" {% if kelas == '11' %}selected{% endif %}>11</option>
+                <option value="12" {% if kelas == '12' %}selected{% endif %}>12</option>
+            </select><br><br>
+
+            <!-- Tambahkan input hidden jika hasil prediksi sudah ada -->
+            {% if prediction %}
+                <input type="hidden" name="potongan_spp" value="{{ prediction }}">
+                <input type="hidden" name="spp_normal" value="{{ spp_normal }}">
+                <input type="hidden" name="harus_dibayar" value="{{ harus_dibayar }}">
+            {% endif %}
+            
+
+            <!-- Tombol Prediksi dan Simpan -->
+            <button type="submit">Prediksi</button>
+            <button type="submit" formaction="/save" id="saveButton">Simpan Data</button>
+        </form>
+
+        {% if prediction is not none %}
+            <div class="result">
+                <h2>Hasil Prediksi Bantuan Pendidikan</h2>
+                <p><strong>Potongan SPP: </strong>{{ prediction }}</p>
+                <p><strong>SPP Normal: </strong>{{ spp_normal }}</p>
+                <p><strong>Harus Dibayar: </strong>{{ harus_dibayar }}</p>
+            </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>
